@@ -23,13 +23,8 @@ There is no test runner or test suite configured.
 - React 19 + Vite 7, plain JavaScript (JSX), no TypeScript, no router, no state library.
 - `src/main.jsx` mounts `<App />` in `StrictMode`; nearly all the app lives in a single component, `src/App.jsx`.
 - `App` holds all state with `useState`: the transactions list (seeded with hardcoded sample data), the add-form fields, and the type/category filters. Totals and the filtered list are derived on every render; there is no persistence, so data resets on reload.
-- Transaction shape: `{ id, description, amount, type: "income" | "expense", category, date: "YYYY-MM-DD" }`. Categories are a hardcoded array in `App.jsx`, shared by the add form and the filter.
+- Transaction shape: `{ id, description, amount, type: "income" | "expense", category, date: "YYYY-MM-DD" }`. `amount` must be a number (the form input yields a string, so `handleSubmit` parses it); totals are computed with `reduce` and break if strings slip in. Categories are a hardcoded array in `App.jsx`, shared by the add form and the filter.
 - Styling is plain CSS: global styles in `src/index.css`, component styles in `src/App.css`.
-
-## Known issues (from the course setup)
-
-- `amount` is stored as a string (in both seed data and new transactions), so the `reduce` totals concatenate strings instead of summing.
-- The "Freelance Work" seed entry has `type: "expense"` with category `salary`.
 
 ## Lint config notes
 
