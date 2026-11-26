@@ -1,11 +1,56 @@
-* {
+:root {
+  /* Security-paper greens, slate ink, ledger teal and red ink. */
+  --paper: #F2F5F3;
+  --surface: #FFFFFF;
+  --slip: #E2EEE9;
+  --ink: #17262E;
+  --ink-muted: #56666C;
+  --rule: #D3DDD8;
+  --teal: #0E6B5E;
+  --teal-strong: #0A5449;
+  --crimson: #A8243B;
+
+  --radius-slip: 14px;
+  --radius-panel: 10px;
+  --radius-control: 8px;
+
+  font-family: "Public Sans", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  color: #333;
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

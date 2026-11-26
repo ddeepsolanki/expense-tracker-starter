@@ -1,165 +1,461 @@
+/* ---------- Page ---------- */
+
 .app {
-  max-width: 800px;
+  max-width: 920px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 40px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-h1 {
-  margin-bottom: 4px;
+.app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .subtitle {
-  margin-bottom: 20px;
-  color: #666;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
 }
 
-.summary {
+h2 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.num,
+.balance-amount,
+.balance-breakdown dd {
+  font-variant-numeric: tabular-nums;
+}
+
+.amount-income {
+  color: var(--teal);
+}
+
+.amount-expense {
+  color: var(--crimson);
+}
+
+/* ---------- Balance slip (the cheque) ---------- */
+
+.balance-slip {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+  padding: 36px 40px;
+  background-color: var(--slip);
+  border-radius: var(--radius-slip);
+  /* Inner printed border, like the frame on a cheque. */
+  outline: 1px solid rgb(14 107 94 / 0.22);
+  outline-offset: -10px;
 }
 
-.summary-card {
-  flex: 1;
-  border: 1px solid #ddd;
-  padding: 14px;
-  background: #fff;
+/* Guilloché-style security print: two offset ring sets interfering. */
+.balance-slip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-radial-gradient(circle at 105% 130%, transparent 0 13px, rgb(14 107 94 / 0.11) 13px 14px),
+    repeating-radial-gradient(circle at 75% -60%, transparent 0 13px, rgb(14 107 94 / 0.09) 13px 14px);
+  mask-image: linear-gradient(to right, transparent 25%, #000 85%);
+  pointer-events: none;
 }
 
-.summary-card h3 {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 4px;
+.balance-slip > * {
+  position: relative;
 }
 
-.income-amount {
-  color: green;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.expense-amount {
-  color: red;
-  font-size: 20px;
-  font-weight: bold;
+.balance-label {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
 }
 
 .balance-amount {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: clamp(2.75rem, 9vw, 4.75rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  margin-top: 6px;
 }
 
-.spending-chart {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
-  background: #fff;
-}
-
-.spending-chart h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-.empty-chart {
-  color: #888;
-  font-size: 14px;
-}
-
-.add-transaction {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
-  background: #fff;
-}
-
-.add-transaction h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-form {
+.balance-breakdown {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 32px;
 }
 
-form input,
-form select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+.balance-breakdown dt {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
 }
 
-form input[type="text"] {
-  flex: 2;
+.balance-breakdown dd {
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
-form input[type="number"] {
-  flex: 1;
+/* ---------- Add a transaction ---------- */
+
+.entry {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
+  padding: 24px;
 }
 
-form select {
-  flex: 1;
+.entry h2 {
+  margin-bottom: 16px;
 }
 
-form button {
-  padding: 8px 20px;
-  background: #333;
-  color: #fff;
-  border: none;
+.entry-form {
+  display: grid;
+  grid-template-columns: auto minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field > span {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+.field input,
+.field select,
+.filters select {
+  height: 40px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  min-width: 0;
+}
+
+.field input,
+.field select {
+  width: 100%;
+}
+
+.field input:hover,
+.field select:hover,
+.filters select:hover {
+  border-color: #B4C4BD;
+}
+
+.field input::placeholder {
+  color: #8A989C;
+}
+
+.type-toggle {
+  border: 0;
+  min-width: 0;
+  display: flex;
+  padding: 3px;
+  height: 40px;
+  background: var(--paper);
+  border-radius: var(--radius-control);
+}
+
+.toggle-option {
+  position: relative;
+  display: flex;
+}
+
+.toggle-option input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.transactions {
-  margin-bottom: 24px;
+.toggle-option span {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
-.transactions h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+.toggle-option input:checked + span {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+.toggle-option input[value="expense"]:checked + span {
+  color: var(--crimson);
+}
+
+.toggle-option input[value="income"]:checked + span {
+  color: var(--teal);
+}
+
+.toggle-option input:focus-visible + span {
+  outline: 2px solid var(--teal);
+  outline-offset: 1px;
+}
+
+.button-primary {
+  height: 40px;
+  padding: 0 18px;
+  background: var(--teal);
+  color: #fff;
+  border: 0;
+  border-radius: var(--radius-control);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button-primary:hover {
+  background: var(--teal-strong);
+}
+
+/* ---------- Spending by category ---------- */
+
+.spending h2 {
+  margin-bottom: 16px;
+}
+
+.empty-note {
+  color: var(--ink-muted);
+}
+
+/* ---------- Transactions (the register) ---------- */
+
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 16px;
 }
 
 .filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .filters select {
-  padding: 6px;
-  border: 1px solid #ccc;
-  font-size: 13px;
+  height: 36px;
+  font-size: 0.875rem;
+}
+
+.segmented {
+  display: flex;
+  padding: 3px;
+  height: 36px;
+  background: #E5EBE8;
+  border-radius: var(--radius-control);
+}
+
+.segmented button {
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.segmented button:hover {
+  color: var(--ink);
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+.register-scroll {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-panel);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.9375rem;
 }
 
-thead {
-  background: #f5f5f5;
-}
-
-th, td {
-  padding: 10px;
+th,
+td {
+  padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 14px;
+  white-space: nowrap;
 }
 
 th {
-  font-size: 12px;
-  color: #888;
-  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--rule);
+}
+
+tbody tr + tr td {
+  border-top: 1px solid #E6ECE9;
+}
+
+tbody tr:hover {
+  background: #F7FAF8;
+}
+
+th.num,
+td.num {
+  text-align: right;
+}
+
+td.num {
+  font-weight: 600;
+}
+
+.cell-date {
+  color: var(--ink-muted);
+}
+
+.cell-description {
+  width: 100%;
+  font-weight: 500;
+}
+
+td.cell-balance {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.category-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  background: var(--paper);
+  border-radius: 999px;
+}
+
+.cell-action {
+  padding-left: 0;
+  text-align: right;
 }
 
 .delete-btn {
-  padding: 4px 10px;
-  background: #eee;
-  border: 1px solid #ccc;
+  padding: 4px 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
   cursor: pointer;
-  font-size: 12px;
-  color: #333;
+}
+
+.delete-btn:hover {
+  color: var(--crimson);
+  background: rgb(168 36 59 / 0.08);
+}
+
+.register-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 24px;
+  color: var(--ink-muted);
+  background: var(--surface);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius-panel);
+}
+
+.button-quiet {
+  padding: 6px 12px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-control);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button-quiet:hover {
+  border-color: #B4C4BD;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 720px) {
+  .app {
+    padding: 24px 16px 48px;
+    gap: 32px;
+  }
+
+  .balance-slip {
+    padding: 28px 24px;
+  }
+
+  .entry {
+    padding: 20px 16px;
+  }
+
+  .entry-form {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* Phones keep date, description, amount and delete; category and running balance return on wider screens. */
+  .col-category,
+  .col-balance {
+    display: none;
+  }
+
+  th,
+  td {
+    padding: 12px;
+  }
+
+  .cell-description {
+    white-space: normal;
+  }
+
+  .type-toggle,
+  .field-description,
+  .button-primary {
+    grid-column: 1 / -1;
+  }
+
+  .toggle-option {
+    flex: 1;
+  }
+
+  .toggle-option span {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
